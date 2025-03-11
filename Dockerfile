@@ -15,6 +15,8 @@ RUN pip install pipenv \
 # Copy project
 COPY . /app/
 
+RUN python manage.py migrate
+
 # Expose port for the Django app
 EXPOSE 8000
 
