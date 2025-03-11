@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED=1
 
 # Install dependencies
 COPY Pipfile /app/
-RUN pip install pipenv && pipenv install --deploy --system
+RUN pip install pipenv && pipenv install --deploy
 
 # Copy project
 COPY . /app/
