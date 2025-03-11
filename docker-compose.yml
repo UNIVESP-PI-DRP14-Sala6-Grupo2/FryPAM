@@ -1,0 +1,16 @@
+services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    develop:
+      watch:
+        - path: ./project
+          target: /app/project
+          action: sync
+        - path: Pipfile
+          target: /app/Pipfile
+          action: rebuild
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver "0.0.0.0:8000"

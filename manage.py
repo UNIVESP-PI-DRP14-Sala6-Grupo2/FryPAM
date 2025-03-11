@@ -6,6 +6,8 @@ import sys
 
 def main():
     """Run administrative tasks."""
+    if os.environ.get('DJANGO_PROD') is True:
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings.prod')
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
     try:
         from django.core.management import execute_from_command_line
