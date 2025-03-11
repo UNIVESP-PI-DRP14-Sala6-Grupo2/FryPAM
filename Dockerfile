@@ -13,10 +13,10 @@ RUN pip install pipenv \
 # Copy project
 COPY . /app/
 
-RUN pipenv run manage.py migrate
+RUN pipenv run python manage.py migrate
 
 # Expose port for the Django app
 EXPOSE 8000
 
 # Run Django development server
-CMD ["pipenv", "run", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["pipenv", "run", "python","manage.py", "runserver", "0.0.0.0:8000"]
