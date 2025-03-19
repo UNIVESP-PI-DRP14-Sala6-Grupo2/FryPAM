@@ -39,6 +39,12 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
 
+class TenantAdmin(Tenant):
+    model = Tenant
+    list_display = ('name','environment', 'aws_account_id', 'description')
+    search_fields = ('name', 'description')
+
+
 admin.site.unregister(Group)
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Tenant)
