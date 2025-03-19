@@ -5,6 +5,7 @@ WORKDIR /app
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ARG DJANGO_SUPERUSER_PASSWORD
 
 # Install dependencies
 COPY Pipfile /app/
@@ -13,7 +14,7 @@ RUN pip install pipenv \
 # Copy project
 COPY . /app/
 
-RUN pipenv run python manage.py migrate && pipenv run python manage.py createsuperuser --noinput --email admin@frypam.com --password App@frypam2025
+RUN pipenv run python manage.py migrate && pipenv run python manage.py createsuperuser --noinput --email admin@frypam.com --password $DJANGO_SUPERUSER_PASSWORD
 
 # Expose port for the Django app
 EXPOSE 8000
