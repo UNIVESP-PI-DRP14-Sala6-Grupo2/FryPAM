@@ -14,7 +14,7 @@ RUN pip install pipenv \
 # Copy project
 COPY . /app/
 
-RUN pipenv run python manage.py migrate && pipenv run python manage.py createsuperuser --noinput --email admin@frypam.com --password $DJANGO_SUPERUSER_PASSWORD
+RUN pipenv run python manage.py migrate && pipenv run python manage.py createsuperuser --noinput --email admin@frypam.com
 
 # Expose port for the Django app
 EXPOSE 8000
