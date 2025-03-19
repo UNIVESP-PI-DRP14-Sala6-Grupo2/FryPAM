@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-nd2nb_$&e7od6l!3vkhy@6(r5uehgw07@e1pn=ui495bkj0co*
 DEBUG = True
 
 ALLOWED_HOSTS = ["backend-dev.pavops.net", "localhost", "127.0.0.1"]
-
+CSRF_TRUSTED_ORIGINS = ["backend-dev.pavops.net", "localhost", "127.0.0.1"]
 
 # Application definition
 
