@@ -39,14 +39,13 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
 
-class TenantAdmin(Tenant):
-    model = Tenant
-    list_display = ('name','environment', 'aws_account_id', 'description')
-    search_fields = ('name', 'description')
+class TenantAdmin(admin.ModelAdmin):
+    list_display = ('name','environment', 'aws_account_id', 'status')
+    search_fields = ('name', 'environment')
 
 
 admin.site.unregister(Group)
 admin.site.register(User, CustomUserAdmin)
-admin.site.register(Tenant)
+admin.site.register(Tenant,TenantAdmin)
 admin.site.register(IAMAccount)
 admin.site.register(PasswordRequest)
