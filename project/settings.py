@@ -40,13 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cofre'
+    'pam'
 ]
 
 JAZZMIN_SETTINGS = {
-    "site_title": "Cofre",
-    "site_header": "Cofre",
-    "site_brand": "Cofre",
+    "site_title": "pam",
+    "site_header": "pam",
+    "site_brand": "pam",
     "show_ui_builder": True,
 }
 
@@ -125,7 +125,7 @@ DATABASES = {
 }
 
 
-AUTH_USER_MODEL = 'cofre.User'
+AUTH_USER_MODEL = 'pam.User'
 
 
 # Password validation
@@ -163,6 +163,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

@@ -41,14 +41,14 @@ class User(AbstractUser, PermissionsMixin):
     groups = models.ManyToManyField(
         'auth.Group',
         blank=True,
-        related_name='cofre_user_groups',
-        related_query_name='cofre_user',
+        related_name='pam_user_groups',
+        related_query_name='pam_user',
     )
     user_permissions = models.ManyToManyField(
         'auth.Permission',
         blank=True,
-        related_name='cofre_user_permissions',
-        related_query_name='cofre_user',
+        related_name='pam_user_permissions',
+        related_query_name='pam_user',
     )
 
     objects = UserManager()

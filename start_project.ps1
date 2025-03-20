@@ -1,17 +1,17 @@
-# PowerShell script to start the Django project
-# Author: Cascade
-# Date: 2025-03-20
+# Script PowerShell para iniciar o projeto Django
+# Autor: Cascade
+# Data: 2025-03-20
 
-# Set error action preference to stop on error
+# Definir preferência de ação de erro para parar em erros
 $ErrorActionPreference = "Stop"
 
-# Define colors for output
+# Definir cores para saída
 $GREEN = [ConsoleColor]::Green
 $YELLOW = [ConsoleColor]::Yellow
 $RED = [ConsoleColor]::Red
 $CYAN = [ConsoleColor]::Cyan
 
-# Function to display colored messages
+# Função para exibir mensagens coloridas
 function Write-ColoredMessage {
     param (
         [string]$Message,
@@ -20,7 +20,7 @@ function Write-ColoredMessage {
     Write-Host $Message -ForegroundColor $Color
 }
 
-# Function to check if a command exists
+# Função para verificar se um comando existe
 function Test-CommandExists {
     param (
         [string]$Command
@@ -30,95 +30,104 @@ function Test-CommandExists {
     return $exists
 }
 
-# Check if Python is installed
-Write-ColoredMessage "Checking if Python is installed..." $CYAN
+# Verificar se o Python está instalado
+Write-ColoredMessage "Verificando se o Python está instalado..." $CYAN
 if (-not (Test-CommandExists "python")) {
-    Write-ColoredMessage "Python is not installed. Please install Python 3.8 or higher." $RED
+    Write-ColoredMessage "O Python não está instalado. Por favor, instale o Python 3.8 ou superior." $RED
     exit 1
 }
 
-# Check Python version
+# Verificar versão do Python
 $pythonVersion = (python --version) 2>&1
-Write-ColoredMessage "Found $pythonVersion" $GREEN
+Write-ColoredMessage "Encontrado $pythonVersion" $GREEN
 
-# Check if pip is installed
-Write-ColoredMessage "Checking if pip is installed..." $CYAN
+# Verificar se o pip está instalado
+Write-ColoredMessage "Verificando se o pip está instalado..." $CYAN
 if (-not (Test-CommandExists "pip")) {
-    Write-ColoredMessage "pip is not installed. Please install pip." $RED
+    Write-ColoredMessage "O pip não está instalado. Por favor, instale o pip." $RED
     exit 1
 }
 
-# Create virtual environment if it doesn't exist
+# Criar ambiente virtual se não existir
 $venvPath = ".venv"
 if (-not (Test-Path $venvPath)) {
-    Write-ColoredMessage "Creating virtual environment..." $CYAN
+    Write-ColoredMessage "Criando ambiente virtual..." $CYAN
     python -m venv $venvPath
     if (-not $?) {
-        Write-ColoredMessage "Failed to create virtual environment." $RED
+        Write-ColoredMessage "Falha ao criar ambiente virtual." $RED
         exit 1
     }
-    Write-ColoredMessage "Virtual environment created successfully." $GREEN
+    Write-ColoredMessage "Ambiente virtual criado com sucesso." $GREEN
 } else {
-    Write-ColoredMessage "Virtual environment already exists." $GREEN
+    Write-ColoredMessage "Ambiente virtual já existe." $GREEN
 }
 
-# Activate virtual environment
-Write-ColoredMessage "Activating virtual environment..." $CYAN
+# Ativar ambiente virtual
+Write-ColoredMessage "Ativando ambiente virtual..." $CYAN
 $activateScript = Join-Path $venvPath "Scripts\Activate.ps1"
 try {
     & $activateScript
-    Write-ColoredMessage "Virtual environment activated." $GREEN
+    Write-ColoredMessage "Ambiente virtual ativado." $GREEN
 } catch {
-    Write-ColoredMessage "Failed to activate virtual environment: $_" $RED
+    Write-ColoredMessage "Falha ao ativar ambiente virtual: $_" $RED
     exit 1
 }
 
-# Install dependencies
-Write-ColoredMessage "Installing dependencies..." $CYAN
+# Instalar dependências
+Write-ColoredMessage "Instalando dependências..." $CYAN
 if (Test-Path "requirements.txt") {
     pip install -r requirements.txt
     if (-not $?) {
-        Write-ColoredMessage "Failed to install dependencies." $RED
+        Write-ColoredMessage "Falha ao instalar dependências." $RED
         exit 1
     }
-    Write-ColoredMessage "Dependencies installed successfully." $GREEN
+    Write-ColoredMessage "Dependências instaladas com sucesso." $GREEN
 } else {
-    Write-ColoredMessage "requirements.txt not found. Installing Django..." $YELLOW
+    Write-ColoredMessage "requirements.txt não encontrado. Instalando Django..." $YELLOW
     pip install django
     if (-not $?) {
-        Write-ColoredMessage "Failed to install Django." $RED
+        Write-ColoredMessage "Falha ao instalar Django." $RED
         exit 1
     }
-    Write-ColoredMessage "Django installed successfully." $GREEN
+    Write-ColoredMessage "Django instalado com sucesso." $GREEN
 }
 
-# Create static directory if it doesn't exist
+# Criar diretório estático se não existir
 $staticPath = "static"
 if (-not (Test-Path $staticPath)) {
-    Write-ColoredMessage "Creating static directory..." $CYAN
+    Write-ColoredMessage "Criando diretório estático..." $CYAN
     New-Item -ItemType Directory -Path $staticPath | Out-Null
-    Write-ColoredMessage "Static directory created." $GREEN
+    Write-ColoredMessage "Diretório estático criado." $GREEN
 }
 
-# Run migrations
-Write-ColoredMessage "Running migrations..." $CYAN
-python manage.py migrate
+# Criar migrações
+Write-ColoredMessage "Criando migrações..." $CYAN
+python manage.py makemigrations
 if (-not $?) {
-    Write-ColoredMessage "Failed to run migrations." $RED
+    Write-ColoredMessage "Falha ao criar migrações." $RED
     exit 1
 }
-Write-ColoredMessage "Migrations completed successfully." $GREEN
+Write-ColoredMessage "Migrações criadas com sucesso." $GREEN
 
-# Collect static files
-Write-ColoredMessage "Collecting static files..." $CYAN
+# Aplicar migrações
+Write-ColoredMessage "Aplicando migrações..." $CYAN
+python manage.py migrate
+if (-not $?) {
+    Write-ColoredMessage "Falha ao aplicar migrações." $RED
+    exit 1
+}
+Write-ColoredMessage "Migrações aplicadas com sucesso." $GREEN
+
+# Coletar arquivos estáticos
+Write-ColoredMessage "Coletando arquivos estáticos..." $CYAN
 python manage.py collectstatic --noinput
 if (-not $?) {
-    Write-ColoredMessage "Failed to collect static files." $YELLOW
-    Write-ColoredMessage "This is not critical, continuing..." $YELLOW
+    Write-ColoredMessage "Falha ao coletar arquivos estáticos." $YELLOW
+    Write-ColoredMessage "Isso não é crítico, continuando..." $YELLOW
 }
 
-# Create a superuser if none exists
-Write-ColoredMessage "Checking if superuser exists..." $CYAN
+# Criar superusuário se não existir
+Write-ColoredMessage "Verificando se superusuário existe..." $CYAN
 $superuserExists = python -c "
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
@@ -130,15 +139,15 @@ print(User.objects.filter(is_superuser=True).exists())
 "
 
 if ($superuserExists -eq "False") {
-    Write-ColoredMessage "No superuser found. Would you like to create one? (y/n)" $YELLOW
+    Write-ColoredMessage "Nenhum superusuário encontrado. Deseja criar um? (s/n)" $YELLOW
     $createSuperuser = Read-Host
-    if ($createSuperuser -eq "y") {
+    if ($createSuperuser -eq "s") {
         python manage.py createsuperuser
     }
 }
 
-# Start development server
-Write-ColoredMessage "Starting development server..." $CYAN
-Write-ColoredMessage "The server will be available at http://127.0.0.1:8000/" $GREEN
-Write-ColoredMessage "Press Ctrl+C to stop the server." $YELLOW
+# Iniciar servidor de desenvolvimento
+Write-ColoredMessage "Iniciando servidor de desenvolvimento..." $CYAN
+Write-ColoredMessage "O servidor estará disponível em http://127.0.0.1:8000/" $GREEN
+Write-ColoredMessage "Pressione Ctrl+C para parar o servidor." $YELLOW
 python manage.py runserver

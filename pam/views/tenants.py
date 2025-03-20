@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.core import serializers
-from cofre.models import Tenant
+from pam.models import Tenant
 import json
 
 
