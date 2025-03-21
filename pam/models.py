@@ -77,7 +77,6 @@ class Tenant(models.Model):
     def __str__(self):
         return self.name
 
-
 class UserTenant(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -146,7 +145,3 @@ class PasswordRequest(models.Model):
                 name='valid_request_window'
             )
         ]
-
-
-
-

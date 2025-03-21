@@ -16,10 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from pam.views import tenants
+from pam.views import base
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/tenants', tenants.get_tenants),
-    path('api/tenants/<int:tenant_id>', tenants.get_tenant_by_id),
+    path('', base.base_view),
 ]
