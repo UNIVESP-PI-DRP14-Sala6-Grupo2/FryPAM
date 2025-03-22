@@ -55,26 +55,26 @@ JAZZMIN_UI_TWEAKS = {
     "footer_small_text": False,
     "body_small_text": True,
     "brand_small_text": False,
-    "brand_colour": False,
-    "accent": "accent-primary",
-    "navbar": "navbar-dark",
+    "brand_colour": "navbar-navy",
+    "accent": "accent-navy",
+    "navbar": "navbar-navy navbar-dark",
     "no_navbar_border": False,
     "navbar_fixed": False,
     "layout_boxed": False,
-    "footer_fixed": True,
+    "footer_fixed": False,
     "sidebar_fixed": False,
-    "sidebar": "sidebar-dark-primary",
+    "sidebar": "sidebar-dark-navy",
     "sidebar_nav_small_text": False,
     "sidebar_disable_expand": False,
     "sidebar_nav_child_indent": False,
     "sidebar_nav_compact_style": True,
     "sidebar_nav_legacy_style": False,
-    "sidebar_nav_flat_style": True,
-    "theme": "darkly",
+    "sidebar_nav_flat_style": False,
+    "theme": "litera",
     "dark_mode_theme": None,
     "button_classes": {
-        "primary": "btn-primary",
-        "secondary": "btn-secondary",
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
         "info": "btn-info",
         "warning": "btn-warning",
         "danger": "btn-danger",
@@ -124,6 +124,15 @@ DATABASES = {
     }
 }
 
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'pam',
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#        'PASSWORD': '123456',
+#        }
 
 AUTH_USER_MODEL = 'pam.User'
 

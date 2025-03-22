@@ -21,3 +21,6 @@ EXPOSE 8000
 
 # Run Django development server
 CMD ["pipenv", "run", "python","manage.py", "runserver", "0.0.0.0:8000"]
+
+
+# USER -> URL -> VIEW -> *MODEL* -> *DATABASE* -> *MODEL* -> VIEW -> TEMPLATE -> USER

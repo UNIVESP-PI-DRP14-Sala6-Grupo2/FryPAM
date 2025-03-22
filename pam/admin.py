@@ -1,51 +1,114 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, Group
-from .models import User, Tenant, IAMAccount, PasswordRequest
+
+from .models import User, Tenant, PasswordRequest, CloudAccount, CloudAccountAccessType
 
 
 class CustomUserAdmin(UserAdmin):
     model = User
-    list_display = ('email', 'role', 'is_staff', 'is_superuser')
+    list_display = ('email', 'name', 'role', 'is_staff', 'is_superuser')
 
     fieldsets = (
         (
             None,
             {
-                'fields': ('email', 'password')
+                'fields': ('email','name')
+            }
+        ),
+        (
+            'Password',
+            {
+                'fields': ('password',)
             }
         ),
         (
             'Permissions',
             {
                 'fields':
-                    ('role', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
+                    ('role', 'is_active', 'is_staff', 'is_superuser',)
             }
         ),
         (
-            'Important dates',
+            'Other Information',
             {
-                'fields': ('last_login',)
+                'fields': ('last_login','observation')
             }
         ),
+    )
+
+    #adiciono um novo registro
+    add_fieldsets = [
+        (None, {
+            'classes': ('wide',),
+            'fields': ('name', 'email', 'password1', 'password2'),
+        }
+    ),
+    ('Permissions',
+        {
+            'fields':
+                ('role', 'is_active', 'is_staff', 'is_superuser',)
+        }
+    ),
+    ('Other Information', {
+                'fields': ('observation',)
+            }
+        ),
+    ]
+
+    search_fields = ('email','name')
+    ordering = ('email','name')
+
+class CustomTenantAdmin(admin.ModelAdmin):
+
+    fieldsets = (
+        (None, {
+            'fields': ('name','validator' ,'status'),
+        }),
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', 'role'),
+            'fields': ('name', 'validator', 'status'),
         }),
     )
-    search_fields = ('email',)
-    ordering = ('email',)
 
+    list_display = ('name', 'validator','status')
+    search_fields = ('name','validator__name')
 
-class TenantAdmin(admin.ModelAdmin):
-    list_display = ('name','environment', 'aws_account_id', 'status')
-    search_fields = ('name', 'environment')
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'validator':
+            kwargs['queryset'] = User.objects.filter(role__in=['admin', 'validator'])
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+class CustomCloudAccountAdmin(admin.ModelAdmin):
+    list_display = ('account', 'tenant', 'provider', 'environment', 'cloud_username', 'access_level', 'status')
+    search_fields = ('account', 'tenant__name', 'cloud_username', 'status' )
 
-admin.site.unregister(Group)
+    add_fieldsets = (
+        (None,
+            {
+                'classes': ('wide',),
+                'fields': ('account', 'tenant', 'provider', 'environment', 'cloud_username', 'access_level')
+            }
+         ),
+    )
+    fieldsets = (
+        (None,
+             {
+                'fields': ('account', 'tenant', 'provider', 'environment', 'cloud_username', 'access_level', 'status')
+             }
+         ),
+    )
+
+# Tabelas que vao aparecer no admin
+# admin.site.register(model, classe_customizada)
+
 admin.site.register(User, CustomUserAdmin)
-admin.site.register(Tenant,TenantAdmin)
-admin.site.register(IAMAccount)
+admin.site.register(Tenant,CustomTenantAdmin)
+admin.site.register(CloudAccountAccessType)
+admin.site.register(CloudAccount, CustomCloudAccountAdmin)
 admin.site.register(PasswordRequest)
+
+#remover a tabela grupos do admin
+admin.site.unregister(Group)

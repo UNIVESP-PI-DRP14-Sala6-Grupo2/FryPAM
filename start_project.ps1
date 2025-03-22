@@ -151,3 +151,5 @@ Write-ColoredMessage "Iniciando servidor de desenvolvimento..." $CYAN
 Write-ColoredMessage "O servidor estará disponível em http://127.0.0.1:8000/" $GREEN
 Write-ColoredMessage "Pressione Ctrl+C para parar o servidor." $YELLOW
 python manage.py runserver
+
+
