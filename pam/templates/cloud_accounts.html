@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+
+{% block content %}
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            {% for name in verbose_names %}
+                <th>{{ name }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for obj in objects %}
+            <tr>
+                {% for field in field_names %}
+                    <td>
+                        {% with item=obj|custom_getattr:field %}
+                        <span class="{% if field == 'environment' %} badge rounded-pill {{ environment_pills|get_dict_item:item }} {% endif %}">
+                            {{ item }}
+                        </span>
+                        {% endwith %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

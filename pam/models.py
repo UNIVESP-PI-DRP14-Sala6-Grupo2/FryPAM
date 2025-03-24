@@ -7,15 +7,17 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError("Users must have an email address")
+
         email = self.normalize_email(email)
-        username = email.split("@")[0]
         user = self.model(
             email=email,
-            username=username,
+            username=email,
             **extra_fields
         )
+
         user.set_password(password)
         user.save(using=self._db)
+
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
@@ -34,32 +36,59 @@ class User(AbstractUser, PermissionsMixin):
     ]
 
     email = models.EmailField(unique=True)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICE)
+    name = models.CharField(max_length=255)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICE, default='user')
+    username = models.CharField(max_length=255, unique=False, blank=True, null=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    observation = models.TextField(null=True, blank=True)
 
     groups = models.ManyToManyField(
         'auth.Group',
         blank=True,
-        related_name='cofre_user_groups',
-        related_query_name='cofre_user',
+        related_name='pam_user_groups',
+        related_query_name='pam_user',
     )
+
     user_permissions = models.ManyToManyField(
         'auth.Permission',
         blank=True,
-        related_name='cofre_user_permissions',
-        related_query_name='cofre_user',
+        related_name='pam_user_permissions',
+        related_query_name='pam_user',
     )
 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['name',]
+
 
     def __str__(self):
-        return self.email
+        return self.name
 
 class Tenant(models.Model):
+
+    #nome do cliente
+    name = models.CharField(max_length=255, unique=True)
+    #quem e responsavel por validar o pedido de retirada de senha
+    validator = models.ForeignKey(User, on_delete=models.PROTECT)
+    #status do cliente (ativo ou inativo)
+    status = models.CharField(max_length=20, default='active')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+class CloudAccountAccessType(models.Model):
+    access_level = models.CharField(max_length=20, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.access_level
+
+class CloudAccount(models.Model):
 
     ENVIRONMENT_CHOICE = [
         ('dev', 'Development'),
@@ -67,44 +96,34 @@ class Tenant(models.Model):
         ('prod', 'Production'),
     ]
 
-    name = models.CharField(max_length=255)
-    aws_account_id= models.CharField(max_length=12, unique=True)
-    environment = models.CharField(max_length=20 ,choices=ENVIRONMENT_CHOICE)
-    status = models.CharField(max_length=20, default='active')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-
-class UserTenant(models.Model):
-
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-    tenant = models.ForeignKey(Tenant, on_delete=models.PROTECT)
-
-    class Meta:
-        unique_together = ('user', 'tenant')
-
-class IAMAccount(models.Model):
-    ACCESS_LEVEL_CHOICES = [
-        ('read', 'Read'),
-        ('admin', 'Admin'),
+    CLOUD_PROVIDER = [
+        ('aws', 'Amazon Web Services'),
+        ('azure', 'Microsoft Azure'),
+        ('gcp', 'Google Cloud Platform'),
+        ('oci', 'Oracle Cloud Infrastructure'),
     ]
 
+    account = models.CharField(max_length=12)
     tenant = models.ForeignKey(Tenant, on_delete=models.PROTECT)
-    username = models.CharField(max_length=255)
-    access_level = models.CharField(max_length=20, choices=ACCESS_LEVEL_CHOICES)
+    provider = models.CharField(max_length=20, choices=CLOUD_PROVIDER, default='aws')
+    environment = models.CharField(max_length=20 ,choices=ENVIRONMENT_CHOICE)
+    cloud_username = models.CharField(max_length=255)
+    access_level = models.ForeignKey(CloudAccountAccessType, on_delete=models.PROTECT)
     status = models.CharField(max_length=20, default='active')
-    expiry_date = models.DateTimeField()
-    last_rotated = models.DateTimeField(null=True)
+    last_used = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('tenant', 'username')
+        # super chave unica
+        unique_together = ('account','provider','cloud_username')
+
         indexes = [
-            models.Index(fields=['expiry_date']),
+            models.Index(fields=['tenant','account','provider','cloud_username']),
         ]
+
+
+    def __str__(self):
+        return self.tenant.name + ' > ' + self.account + ' > ' + self.provider + ' > ' + self.cloud_username
 
 class PasswordRequest(models.Model):
     STATUS_CHOICES = [
@@ -116,7 +135,7 @@ class PasswordRequest(models.Model):
         ('used', 'Used'),
     ]
 
-    iam_account = models.ForeignKey(IAMAccount, on_delete=models.PROTECT)
+    iam_account = models.ForeignKey(CloudAccountAccessType, on_delete=models.PROTECT)
     validator = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
@@ -146,7 +165,4 @@ class PasswordRequest(models.Model):
                 name='valid_request_window'
             )
         ]
-
-
-
 

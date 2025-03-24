@@ -1,25 +1,14 @@
-"""
-URL configuration for project project.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path
-from cofre.views import tenants
+from django.urls import path, include
+from pam.views import base, dashboard, password_requests, cloud_accounts, tenants
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/tenants', tenants.get_tenants),
-    path('api/tenants/<int:tenant_id>', tenants.get_tenant_by_id),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path('', dashboard.dashboard_view),
+    path('dashboard.html', dashboard.dashboard_view),
+    path('password_requests.html', password_requests.password_requests_view),
+    path('cloud_accounts.html', cloud_accounts.cloud_accounts_view),
+    path('tenants.html', tenants.tenants_view),
 ]
