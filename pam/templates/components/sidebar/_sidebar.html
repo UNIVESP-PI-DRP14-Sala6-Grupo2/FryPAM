@@ -1,28 +1,28 @@
 {% load static %}
-<div class="container-fluid">
-  <div class="row flex-nowrap">
-      <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark" style="max-width: 200px;">
-          <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-              <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <img src="{% static 'images/icon.ico' %}" alt="Logo" class="me-2" style="width: 40px; height: 40px;">
-                <span class="fs-5 d-none d-sm-inline">FryPAM</span>
-              </a>
-              <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                {% include 'components/sidebar/_dashboard.html' %}
-                {% include 'components/sidebar/_tenants.html' %}
-              </ul>
-              <hr>
-              <div class="dropdown pb-4">
-                  <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                      {% comment %} <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle"> {% endcomment %}
-                      <i class="fs-4 bi-person-circle" width="30" height="30"></i>
-                      <span class="d-none d-sm-inline mx-1">Username</span>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                      <li><a class="dropdown-item" href="#">Sign out</a></li>
-                  </ul>
-              </div>
-          </div>
-      </div>
-  </div>
+<!-- sidenav -->
+<div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark" style="max-width: 220px;">
+    <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+        <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <img src="{% static 'images/logo.ico' %}" alt="Logo" class="me-2" style="width: 40px; height: 40px;">
+            <span class="fs-5 d-none d-sm-inline">FryPAM</span>
+        </a>
+        <ul class="nav nav-pills flex-column" id="menu">
+            {% include 'components/sidebar/_dashboard.html' %}
+            {% include 'components/sidebar/_tenants.html' %}
+            {% include 'components/sidebar/_cloud_accounts.html' %}
+            {% include 'components/sidebar/_password_requests.html' %}
+        </ul>
+        <hr>
+        <div class="dropdown pb-4 mt-auto">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+               id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                {% comment %} <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle"> {% endcomment %}
+                <i class="fs-4 bi-person-circle" width="30" height="30"></i>
+                <span class="d-none d-sm-inline mx-1">Username</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                <li><a class="dropdown-item" href="#">Sign out</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
