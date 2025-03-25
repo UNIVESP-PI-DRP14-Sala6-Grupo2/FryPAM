@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Seu Perfil</h2>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p class="alert alert-info">{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Campo</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Nome de Usuário</td>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <td>Primeiro Nome</td>
+                <td>{{ user.first_name }}</td>
+            </tr>
+            <tr>
+                <td>Sobrenome</td>
+                <td>{{ user.last_name }}</td>
+            </tr>
+            {% if profile %}
+                <tr>
+                    <td>Bio</td>
+                    <td>{{ profile.bio }}</td>  <!-- Exibindo o campo 'bio' do modelo profile, Rafael Ribeiro Silva -->
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <!-- Exibe o formulário de edição de perfil -->
+    {% if is_edit %}
+        <h3>Editar Perfil</h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}  <!-- Exibe o formulário com os campos 'bio' e 'avatar' -->
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

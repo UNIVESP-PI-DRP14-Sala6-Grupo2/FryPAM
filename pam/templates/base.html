@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,10 +24,16 @@
 <div class="col-auto sidebar-container">
     <div class="container-fluid">
         <div class="row flex-nowrap">
+            <!-- Incluindo a sidebar com a logo -->
             {% include 'components/sidebar/_sidebar.html' %}
             <div class="col py-3">
+                <!-- Conteúdo do corpo da página -->
                 <main>
                     {% block content %}
+                    <div class="sidebar">
+                        <img src="{% static 'images/icon.svg' %}" alt="Logo" class="logo" />
+                        <!-- Outros conteúdos da sidebar -->
+                    </div>
                     {% endblock content %}
                 </main>
             </div>
