@@ -9,8 +9,7 @@ ARG DJANGO_SUPERUSER_PASSWORD
 
 # Install dependencies
 COPY Pipfile /app/
-RUN pip install pipenv \
-    && pipenv install --deploy
+RUN pip install -r requirements.txt
 # Copy project
 COPY . /app/
 
