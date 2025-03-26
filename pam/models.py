@@ -62,17 +62,24 @@ class User(AbstractUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name',]
 
-
     def __str__(self):
         return self.name
 
-class Tenant(models.Model):
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    bio = models.TextField(blank=True, null=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
 
-    #nome do cliente
+    def __str__(self):
+        return f'Perfil de {self.user.username}'
+
+
+class Tenant(models.Model):
+    # nome do cliente
     name = models.CharField(max_length=255, unique=True)
-    #quem e responsavel por validar o pedido de retirada de senha
+    # quem é responsável por validar o pedido de retirada de senha
     validator = models.ForeignKey(User, on_delete=models.PROTECT)
-    #status do cliente (ativo ou inativo)
+    # status do cliente (ativo ou inativo)
     status = models.CharField(max_length=20, default='active')
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -89,7 +96,6 @@ class CloudAccountAccessType(models.Model):
         return self.access_level
 
 class CloudAccount(models.Model):
-
     ENVIRONMENT_CHOICE = [
         ('dev', 'Development'),
         ('stage', 'Staging'),
@@ -106,7 +112,7 @@ class CloudAccount(models.Model):
     account = models.CharField(max_length=12)
     tenant = models.ForeignKey(Tenant, on_delete=models.PROTECT)
     provider = models.CharField(max_length=20, choices=CLOUD_PROVIDER, default='aws')
-    environment = models.CharField(max_length=20 ,choices=ENVIRONMENT_CHOICE)
+    environment = models.CharField(max_length=20, choices=ENVIRONMENT_CHOICE)
     cloud_username = models.CharField(max_length=255)
     access_level = models.ForeignKey(CloudAccountAccessType, on_delete=models.PROTECT)
     status = models.CharField(max_length=20, default='active')
@@ -114,13 +120,11 @@ class CloudAccount(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        # super chave unica
-        unique_together = ('account','provider','cloud_username')
+        unique_together = ('account', 'provider', 'cloud_username')
 
         indexes = [
-            models.Index(fields=['tenant','account','provider','cloud_username']),
+            models.Index(fields=['tenant', 'account', 'provider', 'cloud_username']),
         ]
-
 
     def __str__(self):
         return self.tenant.name + ' > ' + self.account + ' > ' + self.provider + ' > ' + self.cloud_username
@@ -161,8 +165,7 @@ class PasswordRequest(models.Model):
         ]
         constraints = [
             models.CheckConstraint(
-                check=models.Q(requested_window__range=(1,4)),
+                check=models.Q(requested_window__range=(1, 4)),
                 name='valid_request_window'
             )
         ]
-
