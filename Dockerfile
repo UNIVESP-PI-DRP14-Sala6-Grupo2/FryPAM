@@ -13,13 +13,13 @@ RUN pip install -r requirements.txt
 # Copy project
 COPY . /app/
 
-RUN pipenv run python manage.py migrate && pipenv run python manage.py createsuperuser --noinput --name admin --email admin@frypam.com
+RUN python manage.py migrate && python manage.py createsuperuser --noinput --name admin --email admin@frypam.com
 
 # Expose port for the Django app
 EXPOSE 8000
 
 # Run Django development server
-CMD ["pipenv", "run", "python","manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python","manage.py", "runserver", "0.0.0.0:8000"]
 
 
 # USER -> URL -> VIEW -> *MODEL* -> *DATABASE* -> *MODEL* -> VIEW -> TEMPLATE -> USER
