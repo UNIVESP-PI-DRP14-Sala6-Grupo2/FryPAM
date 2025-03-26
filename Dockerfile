@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED=1
 ARG DJANGO_SUPERUSER_PASSWORD
 
 # Install dependencies
-COPY Pipfile /app/
+COPY requirements.txt /app/
 RUN pip install -r requirements.txt
 # Copy project
 COPY . /app/
