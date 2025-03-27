@@ -3,4 +3,4 @@ Django==5.1
 django-jazzmin==3.0.1
 pillow==10.4.0
 sqlparse==0.5.3
-typing-extensions==4.12.2
+typing_extensions==4.12.2

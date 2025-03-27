@@ -5,16 +5,21 @@
         <div class="card shadow-lg p-5 rounded-3" style="max-width: 400px; width: 100%;">
             <h2 class="text-center mb-4">Login</h2>
 
-            {% if messages %}
-                <div class="messages mb-3">
-                    {% for message in messages %}
-                        <p class="alert alert-info">{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
             <form method="POST">
                 {% csrf_token %}
+
+                <!-- Verificando se há erro no formulário -->
+                {% if form.errors %}
+                    <div class="alert alert-danger mb-3">
+                        <strong>Insira corretamente seu email e senha por favor!</strong>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
                 <div class="m-5">
                     <label for="id_username" class="form-label" style="font-size: 1.3rem;">Username</label>
                     <div class="justify-content-center">
@@ -27,7 +32,8 @@
                         {{ form.password }}
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Entrar</button>
+
+                <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
         </div>
     </div>
