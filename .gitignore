@@ -17,7 +17,6 @@
 *.pyc
 __pycache__/
 local_settings.py
-db.sqlite3
 db.sqlite3-journal
 media
 
@@ -140,6 +139,14 @@ celerybeat.pid
 
 # SageMath parsed files
 *.sage.py
+
+# Ignorar ambiente virtual
+gerenc/
+
+# Ignorar banco de dados SQLite
+db.sqlite3
+
+static/
 
 # Environments
 .env

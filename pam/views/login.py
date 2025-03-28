@@ -13,7 +13,8 @@ def login_view(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('profile')  # Ou 'accounts/profile', dependendo de como está configurado
+                next_url = request.GET.get('next', 'profile')  # Se houver um 'next' na URL, redireciona para ele
+                return redirect(next_url)
             else:
                 form.add_error(None, "Credenciais inválidas. Tente novamente.")
 
