@@ -1,19 +1,19 @@
 {% load static %}
 <!-- sidenav -->
-<div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark" style="max-width: 220px;">
+<div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark mw-220">
     <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-        <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <img src="{% static 'images/icon.svg' %}" alt="Logo" class="me-2" style="width: 160px; height: 160px;">
+        <a href="{% url 'dashboard' %}" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <img src="{% static 'images/icon.svg' %}" alt="Logo" class="me-2" width="160" height="160">
             <span class="fs-5 d-none d-sm-inline"></span>
         </a>
 
         <!-- Verificando se o usuário está autenticado -->
         {% if user.is_authenticated %}
             <ul class="nav nav-pills flex-column" id="menu">
-                {% include 'components/sidebar/_dashboard.html' %}
-                {% include 'components/sidebar/_tenants.html' %}
-                {% include 'components/sidebar/_cloud_accounts.html' %}
-                {% include 'components/sidebar/_password_requests.html' %}
+                {% include "components/sidebar/_dashboard.html" %}
+                {% include "components/sidebar/_tenants.html" %}
+                {% include "components/sidebar/_cloud_accounts.html" %}
+                {% include "components/sidebar/_password_requests.html" %}
             </ul>
         {% else %}
             <!-- Se não estiver autenticado, direciona para o login -->

@@ -25,7 +25,7 @@ def profile_view(request):
         'profile': profile_obj,  # Informações do perfil, caso exista
     }
 
-    return render(request, 'components/profile.html', content)
+    return render(request, 'profile.html', content)
 
 @login_required
 def edit_profile_view(request):
@@ -40,4 +40,4 @@ def edit_profile_view(request):
     else:
         form = ProfileForm(instance=profile)
 
-    return render(request, 'components/profile.html', {'form': form})
+    return render(request, 'profile.html', {'form': form})
