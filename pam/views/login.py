@@ -3,9 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 
 def login_view(request):
-    print("asd")
     if request.method == 'POST':
-        print(request.POST)
         form = AuthenticationForm(data=request.POST)
 
         if form.is_valid():
