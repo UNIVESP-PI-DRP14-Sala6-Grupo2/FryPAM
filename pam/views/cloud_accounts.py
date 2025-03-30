@@ -1,7 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from pam.models import CloudAccount
 
+@login_required
 def cloud_accounts_view(request):
+
     hide_fields = ['updated_at', 'created_at', 'id', 'last_used']
     environment_pills = {
         'dev': 'text-bg-primary',

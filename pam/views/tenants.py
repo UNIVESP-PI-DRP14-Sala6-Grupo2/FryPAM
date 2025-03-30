@@ -1,6 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from pam.models import Tenant
 
+@login_required
 def tenants_view(request):
 
     hide_fields = ['updated_at', 'created_at', 'id']

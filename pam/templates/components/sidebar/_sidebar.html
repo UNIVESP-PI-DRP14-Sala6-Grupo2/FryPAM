@@ -6,22 +6,37 @@
             <img src="{% static 'images/icon.svg' %}" alt="Logo" class="me-2" style="width: 160px; height: 160px;">
             <span class="fs-5 d-none d-sm-inline"></span>
         </a>
-        <ul class="nav nav-pills flex-column" id="menu">
-            {% include 'components/sidebar/_dashboard.html' %}
-            {% include 'components/sidebar/_tenants.html' %}
-            {% include 'components/sidebar/_cloud_accounts.html' %}
-            {% include 'components/sidebar/_password_requests.html' %}
-        </ul>
+
+        <!-- Verificando se o usuário está autenticado -->
+        {% if user.is_authenticated %}
+            <ul class="nav nav-pills flex-column" id="menu">
+                {% include 'components/sidebar/_dashboard.html' %}
+                {% include 'components/sidebar/_tenants.html' %}
+                {% include 'components/sidebar/_cloud_accounts.html' %}
+                {% include 'components/sidebar/_password_requests.html' %}
+            </ul>
+        {% else %}
+            <!-- Se não estiver autenticado, direciona para o login -->
+            <ul class="nav nav-pills flex-column" id="menu">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'login' %}">
+                        <i class="fs-4 bi-box-arrow-in-right"></i> Login
+                    </a>
+                </li>
+            </ul>
+        {% endif %}
+
         <hr>
+
         <div class="dropdown pb-4 mt-auto">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                {% comment %} <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle"> {% endcomment %}
                 <i class="fs-4 bi-person-circle" width="30" height="30"></i>
-                <span class="d-none d-sm-inline mx-1">User</span>
+                <span class="d-none d-sm-inline mx-1">{{ user.username }}</span> <!-- Exibe o nome do usuário -->
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
+                <!-- Adicionando link de logout -->
+                <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
             </ul>
         </div>
     </div>
