@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <!-- load modal js-->
+    <script src="{% static 'js/loadModal.js' %}"></script>
+    <!-- login modal-->
+    <div class="modal fade"
+         id="loginModal"
+         tabindex="-1"
+         aria-labelledby="loginModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="loginModalLabel">Login</h1>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <!-- Verificando se há erro no formulário -->
+                        {% if form.errors %}
+                            <div class="alert alert-danger m-3" role="alert">
+                                <strong>Insira corretamente seu email e senha por favor!</strong>
+                            </div>
+                        {% endif %}
+                        <div class="form-floating m-3">
+                            <input type="email" id="username" name="username" class="form-control" placeholder="name@example.com" required>
+                            <label for="username">Email</label>
+                        </div>
+                        <div class="form-floating m-3">
+                            <input type="password" id="password" name="password" class="form-control" placeholder="" required>
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
