@@ -105,7 +105,7 @@ SESSION_COOKIE_NAME = 'sessionid'
 
 LOGIN_URL = '/accounts/login/'
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/accounts/login/'
 
 ROOT_URLCONF = 'project.urls'
 
