@@ -1,7 +1,7 @@
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
-from pam.views import dashboard, password_requests, cloud_accounts, tenants, login, profile
+from django.urls import path
+from pam.views import dashboard, password_requests, cloud_accounts, tenants, login, profile, logout
 from pam.views.logout import logout_view
 from project import settings
 
@@ -13,6 +13,7 @@ urlpatterns = [
     path('cloud_accounts.html', cloud_accounts.cloud_accounts_view, name='cloud_accounts'),
     path('tenants.html', tenants.tenants_view, name='tenants'),
     path('accounts/login/', login.login_view, name='login'),
+    path('accounts/logout/', logout.logout_view, name='logout'),
     path('accounts/profile/', profile.profile_view, name='profile'),
     path('accounts/profile/edit', profile.edit_profile_view, name='edit_profile'),
     path('logout/', logout_view, name='logout')

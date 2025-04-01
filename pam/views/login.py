@@ -13,12 +13,13 @@ def login_view(request):
 
             if user is not None:
                 login(request, user)
-                next_url = request.GET.get('next', 'profile')  # Se houver um 'next' na URL, redireciona para ele
+                next_url = request.GET.get('next', '/')  # Se houver um 'next' na URL, redireciona para ele
+                #resolve o bug do next vazio
+                if next_url == '': 
+                    next_url = '/'
                 return redirect(next_url)
             else:
                 form.add_error(None, "Credenciais inválidas. Tente novamente.")
-
     else:
         form = AuthenticationForm()
-
-    return render(request, 'components/login.html', {'form': form})
+    return render(request, 'login.html', {'form': form})
