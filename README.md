@@ -1,3 +1,3 @@
-# backend
+# FryPAM
 
-URL: https://backend-dev.pavops.net/
+URL: https://FryPAM-dev.pavops.net/
