@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-nd2nb_$&e7od6l!3vkhy@6(r5uehgw07@e1pn=ui495bkj0co*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["backend-dev.pavops.net", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["frypam-dev.pavops.net", "localhost", "127.0.0.1"]
 CSRF_TRUSTED_ORIGINS = ["https://frypam-dev.pavops.net"]
 
 # Application definition
@@ -46,9 +46,9 @@ INSTALLED_APPS = [
 ]
 
 JAZZMIN_SETTINGS = {
-    "site_title": "pam",
-    "site_header": "pam",
-    "site_brand": "pam",
+    "site_title": "FryPAM",
+    "site_header": "FryPAM",
+    "site_brand": "FryPAM",
     "show_ui_builder": True,
 }
 

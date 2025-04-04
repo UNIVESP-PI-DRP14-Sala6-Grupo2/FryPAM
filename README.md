@@ -15,6 +15,61 @@ FryPAM é um sistema de Gerenciamento de Acesso Privilegiado para ambientes de n
 - Janelas de acesso com tempo limitado
 - Suporte a Docker para ambientes de desenvolvimento e produção
 
+## Arquitetura e Fluxo de Trabalho
+
+```
+                                       ┌───────────────┐
+                                       │               │
+                                       │   Interface   │
+                                       │  de Usuário   │
+                                       │   (Django)    │
+                                       │               │
+                                       └───────┬───────┘
+                                               │
+                                               ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│                                                                       │
+│                         Sistema FryPAM                                │
+│                                                                       │
+│   ┌───────────────┐     ┌───────────────┐     ┌───────────────┐      │
+│   │               │     │               │     │               │      │
+│   │  Validação    │---->│  Aprovação    │---->│   Acesso      │      │
+│   │  de Usuário   │     │  de Acesso    │     │  Temporário   │      │
+│   │               │     │               │     │               │      │
+│   └───────────────┘     └───────────────┘     └───────┬───────┘      │
+│                                                       │               │
+└───────────────────────────────────────────────────────┼───────────────┘
+                                                        │
+                                                        ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│                                                                       │
+│                     Provedores de Nuvem                               │
+│                                                                       │
+│   ┌───────────────┐     ┌───────────────┐     ┌───────────────┐      │
+│   │    AWS        │     │  Azure (WIP)  │     │   GCP (WIP)   │      │
+│   │   ATIVO       │     │    Futuro     │     │    Futuro     │      │
+│   │    ✓          │     │               │     │               │      │
+│   └───────────────┘     └───────────────┘     └───────────────┘      │
+│                                                                       │
+│                         ┌───────────────┐                             │
+│                         │  OCI (WIP)    │                             │
+│                         │    Futuro     │                             │
+│                         │               │                             │
+│                         └───────────────┘                             │
+│                                                                       │
+└───────────────────────────────────────────────────────────────────────┘
+```
+
+### Fluxo de Solicitação de Acesso
+
+1. **Solicitação**: O usuário solicita acesso a uma conta AWS específica
+2. **Validação**: O validador (responsável) revisa e aprova a solicitação
+3. **Aprovação**: O sistema concede acesso temporário à conta solicitada
+4. **Utilização**: O usuário acessa a conta durante o período de tempo aprovado
+5. **Expiração**: Ao final do período, o acesso é automaticamente revogado
+
+> **Nota**: Na versão atual, apenas a integração com AWS está completamente implementada. As integrações com Azure, GCP e OCI estão planejadas para versões futuras.
+
 ## Requisitos
 
 - Python 3.x

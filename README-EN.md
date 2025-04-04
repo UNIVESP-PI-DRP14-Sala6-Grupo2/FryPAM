@@ -15,6 +15,61 @@ FryPAM is a Privileged Access Management system for cloud environments, providin
 - Time-limited access windows
 - Docker support for both development and production environments
 
+## Architecture and Workflow
+
+```
+                                       ┌───────────────┐
+                                       │               │
+                                       │     User      │
+                                       │   Interface   │
+                                       │   (Django)    │
+                                       │               │
+                                       └───────┬───────┘
+                                               │
+                                               ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│                                                                       │
+│                         FryPAM System                                 │
+│                                                                       │
+│   ┌───────────────┐     ┌───────────────┐     ┌───────────────┐      │
+│   │               │     │               │     │               │      │
+│   │     User      │---->│    Access     │---->│   Temporary   │      │
+│   │  Validation   │     │   Approval    │     │     Access    │      │
+│   │               │     │               │     │               │      │
+│   └───────────────┘     └───────────────┘     └───────┬───────┘      │
+│                                                       │               │
+└───────────────────────────────────────────────────────┼───────────────┘
+                                                        │
+                                                        ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│                                                                       │
+│                     Cloud Providers                                   │
+│                                                                       │
+│   ┌───────────────┐     ┌───────────────┐     ┌───────────────┐      │
+│   │    AWS        │     │  Azure (WIP)  │     │   GCP (WIP)   │      │
+│   │   ACTIVE      │     │    Future     │     │    Future     │      │
+│   │     ✓         │     │               │     │               │      │
+│   └───────────────┘     └───────────────┘     └───────────────┘      │
+│                                                                       │
+│                         ┌───────────────┐                             │
+│                         │  OCI (WIP)    │                             │
+│                         │    Future     │                             │
+│                         │               │                             │
+│                         └───────────────┘                             │
+│                                                                       │
+└───────────────────────────────────────────────────────────────────────┘
+```
+
+### Access Request Workflow
+
+1. **Request**: User requests access to a specific AWS account
+2. **Validation**: The validator (responsible person) reviews and approves the request
+3. **Approval**: The system grants temporary access to the requested account
+4. **Usage**: The user accesses the account during the approved time period
+5. **Expiration**: At the end of the period, access is automatically revoked
+
+> **Note**: In the current version, only AWS integration is fully implemented. Integrations with Azure, GCP, and OCI are planned for future releases.
+
 ## Requirements
 
 - Python 3.x
