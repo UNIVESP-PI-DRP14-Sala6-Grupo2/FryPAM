@@ -147,8 +147,8 @@ Faça login com suas credenciais de administrador para:
 
 ## Licença
 
-[Sua Licença Aqui]
+
 
 ## Contato
 
-[Suas Informações de Contato]
+
