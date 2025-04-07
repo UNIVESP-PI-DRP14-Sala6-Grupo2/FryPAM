@@ -43,7 +43,7 @@ class PasswordRequestForm(forms.ModelForm):
     
     class Meta:
         model = PasswordRequest
-        fields = ['requested_window']
+        fields = ['requested_window', 'justification']
         widgets = {
             'iam_account': forms.HiddenInput()
         }
