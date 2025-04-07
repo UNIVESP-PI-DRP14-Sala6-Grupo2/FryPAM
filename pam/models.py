@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -80,7 +81,7 @@ class Tenant(models.Model):
     # quem é responsável por validar o pedido de retirada de senha
     validator = models.ForeignKey(User, on_delete=models.PROTECT)
     # status do cliente (ativo ou inativo)
-    status = models.CharField(max_length=20, default='active')
+    is_active = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -115,7 +116,7 @@ class CloudAccount(models.Model):
     environment = models.CharField(max_length=20, choices=ENVIRONMENT_CHOICE)
     cloud_username = models.CharField(max_length=255)
     access_level = models.ForeignKey(CloudAccountAccessType, on_delete=models.PROTECT)
-    status = models.CharField(max_length=20, default='active')
+    is_active = models.BooleanField(default=True)
     last_used = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -139,16 +140,28 @@ class PasswordRequest(models.Model):
         ('used', 'Used'),
     ]
 
-    iam_account = models.ForeignKey(CloudAccountAccessType, on_delete=models.PROTECT)
+    # Conta de acesso IAM para a qual a senha está sendo solicitada
+    iam_account = models.ForeignKey(CloudAccount, on_delete=models.PROTECT)
+    
+    # Usuário validador responsável por aprovar ou rejeitar a solicitação
     validator = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
         related_name='requests_validated'
     )
-    status = models.CharField(max_length=20, default='active')
+    
+    # Status atual da solicitação
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    
+    # Duração da janela de tempo solicitada (em horas)
     requested_window = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(4)]
     )
+    
+    # Justificativa para a solicitação
+    justification = models.TextField(blank=True)
+    
+    # Horário de início da janela de tempo
     window_start = models.DateTimeField()
     is_withdraw = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
