@@ -28,16 +28,21 @@
 
         <hr>
 
+        {% if user.is_authenticated %}
+        <!-- Info do usuário logado -->
         <div class="dropdown pb-4 mt-auto">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fs-4 bi-person-circle" width="30" height="30"></i>
-                <span class="d-none d-sm-inline mx-1">{{ user.username }}</span> <!-- Exibe o nome do usuário -->
+                <i class="fs-4 bi-person-circle me-2"></i>
+                <span class="d-none d-sm-inline mx-1">
+                    {{ user.first_name|default:user.name }}
+                </span>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                <!-- Adicionando link de logout -->
+                <li><a class="dropdown-item" href="{% url 'profile' %}">Perfil</a></li>
                 <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
             </ul>
         </div>
+        {% endif %}
     </div>
 </div>

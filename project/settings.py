@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 
 from jazzmin.apps import JazzminConfig
+from pip._vendor.urllib3 import contrib
 
 import pam
 
